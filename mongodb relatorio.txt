@@ -1,0 +1,35 @@
+Ja no mongodb a inserção de 1000 produtos demorous 187 ms ou 0.187 segundos
+
+Quando foi inserido 10 mil vendas, demorou 51 segundos 
+
+pra inserir 90 mil vendas houve um aumento de 10% na cpu e 0.5 % na memoria e um tempo de 7 minutos 
+
+mudando a logica da função de inserção em vez de inserir um por um individualmente, como deve ser feito no mysql para gerar os proprios dados, para uma logica de insertmany o tempo de
+inserção de 100 mil foi de 7 minutos para 1.79 segundos, isso ocorre pois ao receber ou listar um grande json de uma vez é muito mais leve do que receber 100 000 jsons diferentes ou listar
+100 000 jsons diferentes um por um
+
+
+para exibir no shell do mongo db compass não foi possivel, tendo que utilizar um comando para buscar documento por documento o que fez a 
+consulta ficar ineficiente, demorando 24 horas e ainda assim sem ter finalizado, e chegando a consumir 20% da cpu e 2 gb de memoria
+
+após tentativas de exibição via shell foi deixado 24 horas listando venda por venda, porém depois de um certo numero de quantidades começou
+a ficar lento e sem expectativa de finalizar.
+
+Foi produzido uma aplicação web simples com node para trabalhar com mongo db porém, o que acabou se mostrando é que o mongodb é extremamente
+mais rapido mas muito mais limitado. A inserção de dados em massa são muito rapidas e facilitadas quando o node trabalha criando os jsons porém não é permitido inserção de 
+milhoes de dados de uma vez só seguindo a mesma limitação do mysql onde o tempo é muito longo não sabendo se é valido ou não a inserção de milhoes de dados de uma vez via procedure
+
+132 segundos a listagem com joins. A conclusão foi que para trabalhar com jsons e arrays mesmo em grandes quantidades o mongodb é melhor desde que haja uma comunicação com 
+outra coisa. No caso aqui utilizamos nodejs. mas agora para trabalhar diretamente com banco de dados puro e analise de dados mongodb se mostrou ineficiente ou até mesmo inutilizavel.
+
+mongodb se mostrou extremamente eficiente em algumas caracteristicas, sendo uma poderosa ferramenta para manipulação de dados, dentre os tres metodos testados o mongodb shell foi o unico
+que conseguiu inserir mais de 1 milhão de vendas de uma unica vez sem travar ou demorar demais, inserindo 3 400 000 documentos de uma vez em 69 segundos, um tempo que no começo dos testes
+era inimaginavel. 
+
+Conclusão : MongoDB foi mais dificil de utilizar, uma margem maior de utilizar de forma "certa", para cada coisa que queriamos testar houve uma forma de fazer e uma forma de não fazer,
+para inserir, deve-se utilizar insert many e um for para criar um unico objeto grande
+para listar, deve-se utilizar alguma conexão, ou o proprio compass, se não o shell limita. 
+para joins por se tratar de listagem utilizamos o node para poder listar mais de 20(find) ou 100(find.toarray) mas aparentemnete quanto mais logicas de joins a demora para listar aumenta
+exponencialmente, o listar com 1 milhão de documentos demorou 10 segundos para listar todos no console.log mas quando utilizmaos dos joins demorou 132 segundos. 
+Finalizando a parte do mongodb, com a utilização do node.js houve um problema relacionado a desempenho, onde a memoria do navegador não permite inserir mais de 1 milhão de documentos de
+uma vez, e da problema ao tentar listar 4,5 milhões de documentos  

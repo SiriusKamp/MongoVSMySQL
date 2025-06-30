@@ -1,0 +1,38 @@
+Procedure para gerar 1000 clientes demorou 5.985 segundos 
+para a população de 1000 produtos demorou 5.844 segundos 
+já para a população de 10000 vendas, com datas aleartorias demorou 30 segundos
+
+Após os teste de inserções foi feito uma inserção em massa de mais 90 mil inserções, porém a demora foi de 17 minutos praticamente 18 
+, muito mais do que o esperado. se comparado com inserir 9 vezes 10000 itens
+ja em uma segunda tentativa, demorou 27 minutos e meio 
+
+agora com 2.378.360 registros ao utilizar um select * houve retorno em 14 segundos, 18 segundos e 17 segundos
+
+Foi feito teste buscando apenas a coluna quantidade desta vez todos os retornos vieram em 13 segundos fixos mostrando como quando buscamos menos colunas o retorno vem mais estavel
+
+ja quando busquei id e produto_id e foi estavel 11 a 12 segundos 
+
+seguindo o que é popularmente dito no mundo do sql, ao fazer consultas baseadas em datas deixamos ela mais pesada, com a consulta das datas sendo variavel de 14 a 16 segundos e na maior 
+parte das vezes sendo 16 segundos 
+
+Outra coisa muito dita no banco de dados sql é sobre o varchar ser algo mais pesado também, ao fazer um inner join das vendas com os clientes e ao retornar o nome e o email demorou 
+26 minutos
+
+porém há muita instabilidade, na segunda tentativa foi buscado em 285 segundos ou 4 minutos e meio
+
+Logo deve-se tomar muito cuidado em como você quer mostrar seus dados, por exemplo se buscarmos sem ser um select * mas apenas algumas colunas especificas
+
+no exemplo final foi feito um inner join entre 3 tabelas, produtos, venda e clientes e por questões de teste foram feitas 3 consultas : 
+
+consulta apenas do id da venda : 8 minutos
+
+consulta de todos os ids apenas : 8 minutos e 40 segundos
+
+consulta * : 30:45 minutos 
+
+consulta nome data quantidade nome_produto deixando emails e ids de fora : 12 minutos
+
+consulta de 1000 clientes ou produtos 0.010-20 segundos
+
+enquanto a consulta com os 3 inner joins estava em processo houve aumento de 8% de consumo da cpu, 100% no disco e na memoria 0.3% mas os valores podem se alterarem se trabalharmos com 
+tabelas temporarias que agem em cima da memoria em vez da parte principal ser no disco

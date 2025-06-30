@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>MongoDB Testes</title>
+</head>
+<body>
+  <h1>MongoDB + Node Testes</h1>
+  <button onclick="inserirClientesProdutos()">Inserir 10000 Clientes/Produtos</button>
+  <button onclick="inserirVendas()">Inserir 500.000 Vendas</button>
+  <button onclick="listarVendas()">Listar Vendas (console)</button>
+  <button onclick="listarDetalhesVendas()">Listar Vendas com Join (console)</button>
+
+  <script>
+    function inserirClientesProdutos() {
+      fetch('/inserir-clientes-produtos', { method: 'POST' })
+        .then(res => res.text())
+        .then(alert);
+    }
+
+    function inserirVendas() {
+      fetch('/inserir-vendas', { method: 'POST' })
+        .then(res => res.text())
+        .then(alert);
+    }
+
+    function listarVendas() {
+      fetch('/listar-vendas')
+        .then(res => res.json())
+        .then(data => {
+          console.log("📦 Vendas:", data);
+          alert(`Listadas ${data.length} vendas no console`);
+        });
+    }
+
+    function listarDetalhesVendas() {
+      fetch('/listar-detalhes-vendas')
+        .then(res => res.json())
+        .then(data => {
+          console.log("🔍 Vendas detalhadas:", data);
+          alert(`Listadas ${data.length} vendas detalhadas no console`);
+        });
+    }
+  </script>
+</body>
+</html>

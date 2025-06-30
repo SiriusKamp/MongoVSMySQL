@@ -1,0 +1,58 @@
+comandos utilizados diretamente no mongodb Shell
+
+use loja_teste
+
+(function() {
+  for (let i = 1; i <= 1000; i++) {
+    db.cliente.insertOne({
+      nome: "Cliente " + i,
+      email: "cliente" + i + "@exemplo.com"
+    });
+
+    db.produto.insertOne({
+      nome: "Produto " + i,
+      preco: Math.round(Math.random() * 1000) + 1
+    });
+  }
+})();
+
+
+(function() {
+  for (let i = 1; i <= 10000; i++) {
+    const cliente = db.cliente.aggregate([{ $sample: { size: 1 } }]).next();
+    const produto = db.produto.aggregate([{ $sample: { size: 1 } }]).next();
+
+    db.venda.insertOne({
+      cliente_id: cliente._id,
+      produto_id: produto._id,
+      data_venda: new Date(Date.now() - Math.floor(Math.random() * 365) * 86400000),
+      quantidade: Math.floor(Math.random() * 10) + 1
+    });
+  }
+})();
+
+(async function() {
+  const clientes = await db.clientes.find().toArray();
+  const produtos = await db.produtos.find().toArray();
+  const vendas = [];
+
+  for (let i = 0; i < 100000; i++) {
+    const cliente = clientes[Math.floor(Math.random() * clientes.length)];
+    const produto = produtos[Math.floor(Math.random() * produtos.length)];
+
+    vendas.push({
+      cliente_id: cliente._id,
+      produto_id: produto._id,
+      data_venda: new Date(Date.now() - Math.floor(Math.random() * 365) * 86400000),
+      quantidade: Math.floor(Math.random() * 10) + 1
+    });
+  }
+
+  const inicio = Date.now();
+  await db.vendas.insertMany(vendas);
+  const fim = Date.now();
+
+  print(`✅ Inseridos ${vendas.length} registros em ${(fim - inicio) / 1000}s`);
+})();
+
+db.venda.find()
