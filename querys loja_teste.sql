@@ -117,3 +117,7 @@ SELECT DISTINCT
   INNER JOIN cliente c ON c.id = v.cliente_id
   INNER JOIN produto p ON p.id = v.produto_id
   where v.data_venda > '2025-02-01' and v.data_venda < '2025-03-01';
+
+update venda set quantidade = 20;
+
+delete from venda;
